@@ -1,6 +1,6 @@
-# Water tracker
+# Water tracker copy
 
-A water tracker: tap to log each glass, see today's total against a daily goal, and a 14-day chart.
+Tap to log each glass of water, watch today's total fill against your daily goal, and see the last two weeks at a glance.
 
 This app is yours: run it, host it anywhere, change it. It was made with WishWhip.
 

@@ -8,7 +8,7 @@
  * the owner asks for a colour or has left the app's colour to you; keep a colour already set here.
  */
 export const identity = {
-  name: "Water tracker",
+  name: "Water tracker copy",
   description: "Tap to log each glass of water, watch today's total fill against your daily goal, and see the last two weeks at a glance.",
   accent: "#1d6fa3",
   initial: "W",
