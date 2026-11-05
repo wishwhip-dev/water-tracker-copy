@@ -1,0 +1,250 @@
+@import "tailwindcss";
+/* Dialog, select and tabs animate with `animate-in` / `fade-in-0` / `zoom-in-95`. Under Tailwind
+   v4 those live here, not in core — without this import the kit still works but snaps open. */
+@import "tw-animate-css";
+
+/*
+ * The theme: "paper". Warm off-white surfaces, near-black ink text, and a water-blue accent,
+ * #1d6fa3: the app logs glasses of water, so the primary buttons, the progress fill and the
+ * icon all read as water. It has a dark scheme too: on a device set to dark mode the same
+ * tokens take the values in the `prefers-color-scheme: dark` block below (warm near-black
+ * surfaces, paper text, the accent a lighter step, #6dabdf, with dark text), so every component
+ * that reads the tokens follows by itself. Every text pair in both passes WCAG AA. Fonts are the
+ * system stack: nothing to download.
+ *
+ * It is a starting point. If the owner asks for colours, a mood or a brand, change the values here
+ * (and `accent` in `app/identity.ts`); components keep reading the tokens. A colour belongs in both
+ * schemes: the button's fill is `--primary` in light and `--primary-dark` in dark (a lighter step
+ * of the same colour, with dark text), and a new surface or text colour gets its dark value in the
+ * block below.
+ *
+ * Design tokens, the theme mapping, the safe-area utilities, then the base rules. Nothing else is
+ * global.
+ *
+ * `@theme inline` is not decoration. Under Tailwind v4 a utility exists only if the theme declares
+ * it, so without this block `bg-background`, `text-muted-foreground` and `bg-primary` are not
+ * classes at all — Tailwind emits no rule, lint passes, the build passes, and every shadcn
+ * component renders unstyled. That was the state of this file before the component kit landed.
+ *
+ * Do not write colours into components: a component that hardcodes `bg-neutral-900` or
+ * `bg-white` stops following the theme, which is exactly how the previous button ended up painting
+ * near-black on a near-black page, and how a white card ends up under paper-coloured text in dark
+ * mode. No `dark:` variants either: the tokens already switch.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  --radius: 0.75rem;
+  /* The height of a bar fixed to the bottom edge, without the home indicator: see `pb-bottom-bar`. */
+  --bottom-bar: 4rem;
+
+  --background: #faf7f2;
+  --foreground: #1c1915;
+  --card: #fefcf9;
+  --card-foreground: #1c1915;
+  --popover: #fefcf9;
+  --popover-foreground: #1c1915;
+  --primary: #1d6fa3;
+  --primary-foreground: #fefcf9;
+  --secondary: #f4efe9;
+  --secondary-foreground: #1c1915;
+  --muted: #f4efe9;
+  --muted-foreground: #5d5751;
+  --accent: #f4efe9;
+  --accent-foreground: #1c1915;
+  --destructive: #be2038;
+  --destructive-foreground: #fefcf9;
+  --border: #e8e2da;
+  --input: #cdc6be;
+  --ring: #5d5751;
+
+  /* The button in the dark scheme: `--primary` there. The accent a lighter step, with dark text. */
+  --primary-dark: #6dabdf;
+  --primary-dark-foreground: #120f0c;
+
+  /* Chart series: five distinct hues, each at least 4.5:1 on the page. */
+  --chart-1: #2f6e9e;
+  --chart-2: #99533b;
+  --chart-3: #007b76;
+  --chart-4: #7b5894;
+  --chart-5: #836412;
+}
+
+/*
+ * The dark scheme, for a visitor whose device is set to dark mode. The same tokens, so nothing in a
+ * component changes; `--primary` takes `--primary-dark` from above, which is where the owner's
+ * colour lives for dark. Chart series are lighter steps of the same five hues, at least 3:1 on the
+ * dark page and card.
+ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #120f0c;
+    --foreground: #f4efe9;
+    --card: #1c1915;
+    --card-foreground: #f4efe9;
+    --popover: #28231f;
+    --popover-foreground: #f4efe9;
+    --primary: var(--primary-dark);
+    --primary-foreground: var(--primary-dark-foreground);
+    --secondary: #37322d;
+    --secondary-foreground: #f4efe9;
+    --muted: #28231f;
+    --muted-foreground: #b6b0a9;
+    --accent: #37322d;
+    --accent-foreground: #f4efe9;
+    --destructive: #f2686e;
+    --destructive-foreground: #120f0c;
+    --border: #37322d;
+    --input: #5d5751;
+    --ring: #b6b0a9;
+
+    --chart-1: #6dabdf;
+    --chart-2: #da8f74;
+    --chart-3: #4ab9b2;
+    --chart-4: #b893d4;
+    --chart-5: #c1a057;
+  }
+
+  /*
+   * Toasts (Sonner, where `docs/notifications.md` exists) follow the dark scheme too. The Toaster is
+   * mounted without a theme, so Sonner paints its light palette whatever the device says; here it
+   * gets the dark tokens instead, and its coloured kinds (success, info, warning, error) Sonner's
+   * own dark steps, light text on a dark tint at 6:1 or more. `:root` in front outranks Sonner's
+   * rules, which load after this file. Do not pass `theme` to the Toaster: this makes it follow.
+   */
+  :root [data-sonner-toaster][data-sonner-theme="light"] {
+    --normal-bg: var(--popover);
+    --normal-border: var(--border);
+    --normal-text: var(--popover-foreground);
+    --gray2: var(--muted);
+    --gray5: var(--border);
+    --gray11: var(--muted-foreground);
+    --success-bg: #001f0f;
+    --success-border: #003d1c;
+    --success-text: #59f3a6;
+    --info-bg: #000d1f;
+    --info-border: #19233e;
+    --info-text: #5896f3;
+    --warning-bg: #1d1f00;
+    --warning-border: #2e2e00;
+    --warning-text: #f3cf58;
+    --error-bg: #2d0607;
+    --error-border: #4d0408;
+    --error-text: #ff9ea1;
+  }
+
+  :root [data-sonner-toaster][data-sonner-theme="light"] [data-description] {
+    color: var(--muted-foreground);
+  }
+
+  :root [data-sonner-toaster][data-sonner-theme="light"] [data-cancel] {
+    background: var(--secondary);
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/*
+ * A phone's screen edges. The layout sets `viewport-fit=cover`, so on a phone with a notch or a home
+ * indicator the page reaches under them: anything fixed to an edge takes the matching utility
+ * (`fixed bottom-0 pb-safe`). The values are 0 everywhere else.
+ */
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility px-safe {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/*
+ * A bar fixed to the bottom edge (a tab bar) covers whatever scrolls under it, and the last thing on
+ * a page is often a chart's axis labels or the last row of a list. The bar is `h-(--bottom-bar)`
+ * tall plus `pb-safe`; the page content above it ends with `pb-bottom-bar` (the same height plus the
+ * home indicator), so it scrolls clear of the bar. Change the height here, never in a component.
+ */
+@utility pb-bottom-bar {
+  padding-bottom: calc(var(--bottom-bar) + env(safe-area-inset-bottom));
+}
+
+/*
+ * The bar itself: `bottom-bar` on the tab bar's own element. It is fixed, never sticky: a sticky bar
+ * stays where the page ends, so on a page shorter than the screen it floats mid-screen with empty
+ * page below it. Fixed pins it to the bottom edge on every page, and `pb-bottom-bar` on the content
+ * keeps the last line clear of it.
+ */
+@utility bottom-bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  height: calc(var(--bottom-bar) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/*
+ * The only global rules, and they are in a layer on purpose.
+ *
+ * An unlayered bare-element rule beats every Tailwind utility — v4 emits utilities inside
+ * `@layer utilities`, and unlayered CSS outranks any layer. This file used to style `main`, `h1`
+ * and `p` that way for a placeholder hero, which meant `text-muted-foreground` on a paragraph
+ * silently lost to a hardcoded grey. Do not add bare element selectors here.
+ */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Clear of the notch when a phone is turned sideways (0 in portrait). */
+  body {
+    padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+  }
+
+  /* A tap on a control acts at once and never zooms the page on a double tap. */
+  a, button, input, label, select, textarea, [role="button"] {
+    touch-action: manipulation;
+  }
+}
