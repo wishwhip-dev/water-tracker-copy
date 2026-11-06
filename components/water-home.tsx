@@ -156,8 +156,8 @@ export function WaterHome() {
                 : `${remaining} glasses to go.`}
           </p>
           <div className="flex flex-wrap gap-2">
-            <Button size="lg" className="min-w-40 flex-1" onClick={handleLog} aria-label="Log a glass of water">
-              <Plus aria-hidden /> Log a glass
+            <Button size="lg" className="min-w-40 flex-1" onClick={handleLog} aria-label="Add a glass of water">
+              <Plus aria-hidden /> Add a glass
             </Button>
             <Button
               size="lg"
